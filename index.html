@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fade - The Modern Barber Booking App</title>
+  <meta name="description" content="Discover elite barbers, book appointments seamlessly, and pay with ease. The future of grooming is on your phone.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'fade-black': '#121212',
+            'fade-gold': '#D4AF37',
+            'fade-gold-light': '#E5C158',
+            'fade-surface': '#1C1C1C',
+            'fade-border': '#353839',
+            'fade-text': '#F8F8FF',
+            'fade-text-muted': '#A0A0A0',
+          },
+          fontFamily: {
+            'display': ['Playfair Display', 'serif'],
+            'body': ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #F8F8FF;
+    }
+
+    .font-display {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Glassmorphism */
+    .glass {
+      background: rgba(28, 28, 28, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .glass-card {
+      background: rgba(28, 28, 28, 0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(212, 175, 55, 0.3);
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+      transform: translateY(-4px);
+    }
+
+    /* Gold gradient text */
+    .gold-gradient {
+      background: linear-gradient(135deg, #D4AF37 0%, #F5E6A3 50%, #D4AF37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Phone mockup */
+    .phone-mockup {
+      position: relative;
+      width: 280px;
+      height: 580px;
+      background: #000;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow:
+        0 0 0 3px #2a2a2a,
+        0 0 0 6px #1a1a1a,
+        0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .phone-mockup::before {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 24px;
+      background: #1a1a1a;
+      border-radius: 20px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 32px;
+      overflow: hidden;
+    }
+
+    .phone-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+
+    /* Glow effect */
+    .glow-gold {
+      box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Gradient background */
+    .hero-gradient {
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 100%, rgba(212, 175, 55, 0.03) 0%, transparent 30%),
+        #121212;
+    }
+
+    /* Step connector line */
+    .step-line {
+      background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+      height: 2px;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="glass rounded-full px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-fade-gold rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-fade-black" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.707 2.293a1 1 0 0 0-1.414 0l-9 9a1 1 0 1 0 1.414 1.414L4 12.414V21a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-8.586l.293.293a1 1 0 0 0 1.414-1.414l-9-9Z"/>
+            </svg>
+          </div>
+          <span class="font-display text-xl font-semibold text-fade-gold">Fade</span>
+        </div>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#features" class="text-fade-text-muted hover:text-fade-gold transition-colors">Features</a>
+          <a href="#how-it-works" class="text-fade-text-muted hover:text-fade-gold transition-colors">How It Works</a>
+          <a href="#testimonials" class="text-fade-text-muted hover:text-fade-gold transition-colors">Testimonials</a>
+          <a href="#download" class="bg-fade-gold text-fade-black px-5 py-2 rounded-full font-semibold hover:bg-fade-gold-light transition-colors">
+            Download App
+          </a>
+        </div>
+
+        <button class="md:hidden text-fade-text">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient min-h-screen flex items-center pt-24 pb-16 px-6 overflow-hidden">
+    <div class="max-w-7xl mx-auto w-full">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+        <!-- Left: Text Content -->
+        <div class="text-center lg:text-left">
+          <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up">
+            <span class="gold-gradient">Experience</span><br>
+            <span class="text-fade-text">Barbering,</span><br>
+            <span class="gold-gradient">Redefined.</span>
+          </h1>
+
+          <p class="text-lg md:text-xl text-fade-text-muted mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-in-up delay-100">
+            Discover elite barbers, book appointments seamlessly, and pay with ease. The future of grooming is on your phone.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up delay-200">
+            <a href="#download" class="bg-fade-gold text-fade-black px-8 py-4 rounded-full font-semibold text-lg hover:bg-fade-gold-light transition-all hover:scale-105 glow-gold">
+              Get the App
+            </a>
+            <div class="flex gap-3 justify-center">
+              <a href="#" class="glass-card px-4 py-3 rounded-xl flex items-center gap-2 hover:border-fade-gold/30">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                <span class="text-sm">App Store</span>
+              </a>
+              <a href="#" class="glass-card px-4 py-3 rounded-xl flex items-center gap-2 hover:border-fade-gold/30">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+                </svg>
+                <span class="text-sm">Google Play</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Phone Mockups -->
+        <div class="relative flex justify-center lg:justify-end animate-fade-in-up delay-300">
+          <div class="relative">
+            <!-- Main Phone -->
+            <div class="phone-mockup float-animation">
+              <div class="phone-screen">
+                <img src="screenshots/app/01-home.png" alt="Fade App Home Screen">
+              </div>
+            </div>
+
+            <!-- Secondary Phone (offset) -->
+            <div class="absolute -left-20 top-20 phone-mockup scale-75 opacity-60 hidden lg:block" style="animation-delay: 1s;">
+              <div class="phone-screen">
+                <img src="screenshots/app/03-barber-detail.png" alt="Fade App Barber Detail">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-24 px-6 bg-fade-black">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">
+          <span class="gold-gradient">Why Choose</span> <span class="text-fade-text">Fade?</span>
+        </h2>
+        <p class="text-fade-text-muted text-lg max-w-2xl mx-auto">
+          Everything you need for the perfect grooming experience, all in one app.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="glass-card rounded-2xl p-8 reveal">
+          <div class="w-14 h-14 bg-fade-gold/10 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-fade-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold text-fade-text mb-3">Find Your Master Barber</h3>
+          <p class="text-fade-text-muted">
+            Browse a curated list of top-rated barbers. View their portfolios, specialties, and real client reviews to find the perfect match.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="glass-card rounded-2xl p-8 reveal" style="animation-delay: 0.1s;">
+          <div class="w-14 h-14 bg-fade-gold/10 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-fade-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold text-fade-text mb-3">Book in Seconds</h3>
+          <p class="text-fade-text-muted">
+            Check real-time availability and book your next appointment with just a few taps. No more phone calls, no more waiting.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="glass-card rounded-2xl p-8 reveal" style="animation-delay: 0.2s;">
+          <div class="w-14 h-14 bg-fade-gold/10 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-fade-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold text-fade-text mb-3">Secure Payments</h3>
+          <p class="text-fade-text-muted">
+            Pay for your service in the app. Add tips and manage payment methods all in one place for a truly cashless experience.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- App Screenshots Section -->
+  <section class="py-24 px-6 hero-gradient">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">
+          <span class="text-fade-text">Beautiful.</span> <span class="gold-gradient">Intuitive.</span>
+        </h2>
+        <p class="text-fade-text-muted text-lg max-w-2xl mx-auto">
+          A stunning interface designed for the modern man.
+        </p>
+      </div>
+
+      <div class="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory reveal">
+        <div class="flex-shrink-0 snap-center">
+          <img src="screenshots/app/02-explore.png" alt="Explore Screen" class="w-64 rounded-3xl shadow-2xl">
+        </div>
+        <div class="flex-shrink-0 snap-center">
+          <img src="screenshots/app/03-barber-detail.png" alt="Barber Detail" class="w-64 rounded-3xl shadow-2xl">
+        </div>
+        <div class="flex-shrink-0 snap-center">
+          <img src="screenshots/app/05-booking-service.png" alt="Booking Service" class="w-64 rounded-3xl shadow-2xl">
+        </div>
+        <div class="flex-shrink-0 snap-center">
+          <img src="screenshots/app/06-booking-datetime.png" alt="Booking Date Time" class="w-64 rounded-3xl shadow-2xl">
+        </div>
+        <div class="flex-shrink-0 snap-center">
+          <img src="screenshots/app/04-barber-list.png" alt="Barber List" class="w-64 rounded-3xl shadow-2xl">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="py-24 px-6 bg-fade-black">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">
+          <span class="gold-gradient">How It</span> <span class="text-fade-text">Works</span>
+        </h2>
+        <p class="text-fade-text-muted text-lg max-w-2xl mx-auto">
+          Getting your perfect haircut is just three simple steps away.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 relative">
+        <!-- Connector Line -->
+        <div class="hidden md:block absolute top-16 left-1/4 right-1/4 step-line"></div>
+
+        <!-- Step 1 -->
+        <div class="text-center reveal">
+          <div class="w-16 h-16 bg-fade-gold rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-fade-black relative z-10">
+            1
+          </div>
+          <h3 class="font-display text-2xl font-semibold text-fade-gold mb-3">DISCOVER</h3>
+          <p class="text-fade-text-muted">
+            Find the perfect barber near you based on style, price, and location.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="text-center reveal" style="animation-delay: 0.1s;">
+          <div class="w-16 h-16 bg-fade-gold rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-fade-black relative z-10">
+            2
+          </div>
+          <h3 class="font-display text-2xl font-semibold text-fade-gold mb-3">BOOK</h3>
+          <p class="text-fade-text-muted">
+            Select a service, choose a time that fits your schedule, and confirm instantly.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="text-center reveal" style="animation-delay: 0.2s;">
+          <div class="w-16 h-16 bg-fade-gold rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-fade-black relative z-10">
+            3
+          </div>
+          <h3 class="font-display text-2xl font-semibold text-fade-gold mb-3">GET FADED</h3>
+          <p class="text-fade-text-muted">
+            Show up, relax, and enjoy a premium grooming experience. We handle the rest.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="py-24 px-6 hero-gradient">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">
+          <span class="text-fade-text">What Our</span> <span class="gold-gradient">Users Say</span>
+        </h2>
+      </div>
+
+      <div class="glass-card rounded-3xl p-8 md:p-12 text-center reveal">
+        <svg class="w-12 h-12 text-fade-gold mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+        </svg>
+        <p class="text-xl md:text-2xl text-fade-text mb-8 font-light italic">
+          "Fade completely changed how I book my haircuts. So easy to use, and I've found some incredible barbers I never would have known about."
+        </p>
+        <div class="flex items-center justify-center gap-1 mb-4">
+          <svg class="w-5 h-5 text-fade-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-5 h-5 text-fade-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-5 h-5 text-fade-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-5 h-5 text-fade-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-5 h-5 text-fade-gold" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        <p class="text-fade-gold font-semibold">Michael B.</p>
+        <p class="text-fade-text-muted text-sm">Chicago, IL</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section id="download" class="py-24 px-6 bg-fade-black">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="reveal">
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          <span class="gold-gradient">Ready for Your</span><br>
+          <span class="text-fade-text">Best Look?</span>
+        </h2>
+        <p class="text-fade-text-muted text-lg md:text-xl mb-10 max-w-2xl mx-auto">
+          Download Fade today and step into a world of premium, on-demand grooming.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#" class="inline-flex items-center justify-center gap-3 bg-white text-black px-6 py-4 rounded-xl hover:bg-gray-100 transition-colors">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            <div class="text-left">
+              <div class="text-xs">Download on the</div>
+              <div class="text-lg font-semibold">App Store</div>
+            </div>
+          </a>
+          <a href="#" class="inline-flex items-center justify-center gap-3 bg-white text-black px-6 py-4 rounded-xl hover:bg-gray-100 transition-colors">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+            </svg>
+            <div class="text-left">
+              <div class="text-xs">Get it on</div>
+              <div class="text-lg font-semibold">Google Play</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0A0A0A] py-16 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
+        <!-- Brand -->
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 bg-fade-gold rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-fade-black" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.707 2.293a1 1 0 0 0-1.414 0l-9 9a1 1 0 1 0 1.414 1.414L4 12.414V21a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-5h2v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-8.586l.293.293a1 1 0 0 0 1.414-1.414l-9-9Z"/>
+              </svg>
+            </div>
+            <span class="font-display text-xl font-semibold text-fade-gold">Fade</span>
+          </div>
+          <p class="text-fade-text-muted text-sm mb-4">
+            The modern platform connecting clients with barbers.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h4 class="font-semibold text-fade-text mb-4">Company</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">About Us</a></li>
+            <li><a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Careers</a></li>
+            <li><a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Press</a></li>
+          </ul>
+        </div>
+
+        <!-- For Users -->
+        <div>
+          <h4 class="font-semibold text-fade-text mb-4">For Users</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Support</a></li>
+            <li><a href="#features" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Features</a></li>
+            <li><a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Find a Barber</a></li>
+          </ul>
+        </div>
+
+        <!-- For Barbers -->
+        <div>
+          <h4 class="font-semibold text-fade-text mb-4">For Barbers</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Fade for Business</a></li>
+            <li><a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Pricing</a></li>
+            <li><a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Sign Up</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-fade-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-fade-text-muted text-sm">&copy; 2026 Fade Technologies Inc. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Privacy Policy</a>
+          <a href="#" class="text-fade-text-muted hover:text-fade-gold transition-colors text-sm">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Reveal Script -->
+  <script>
+    // Scroll reveal animation
+    function reveal() {
+      const reveals = document.querySelectorAll('.reveal');
+
+      reveals.forEach(element => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+
+        if (elementTop < windowHeight - elementVisible) {
+          element.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', reveal);
+    window.addEventListener('load', reveal);
+  </script>
+</body>
+</html>
