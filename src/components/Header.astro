@@ -1,0 +1,67 @@
+---
+import Logo from './Logo.astro';
+import { url } from '../lib/site';
+
+const nav = [
+  { href: '/', label: 'For barbers' },
+  { href: '/clients/', label: 'For clients' },
+  { href: '/pricing/', label: 'Pricing' },
+];
+const current = Astro.url.pathname.replace(/\/?$/, '/');
+const isCurrent = (href: string) => current === url(href).replace(/\/?$/, '/');
+---
+<header class="sticky top-0 z-40 border-b border-border/70 bg-canvas/85 backdrop-blur supports-[backdrop-filter]:bg-canvas/70">
+  <div class="container-page flex h-16 items-center justify-between gap-4">
+    <a href={url('/')} class="rounded-md" aria-label="Fade home">
+      <Logo />
+    </a>
+
+    <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+      {nav.map((item) => (
+        <a
+          href={url(item.href)}
+          aria-current={isCurrent(item.href) ? 'page' : undefined}
+          class="rounded-md px-3 py-2 text-sm font-medium text-fg-muted transition-colors hover:text-fg aria-[current=page]:text-fg"
+        >{item.label}</a>
+      ))}
+      <a href={url('/waitlist/')} class="btn btn-primary ml-3 py-2.5">Join the barber waitlist</a>
+    </nav>
+
+    <button
+      type="button"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-control border border-border text-fg md:hidden"
+      aria-controls="mobile-nav"
+      aria-expanded="false"
+      data-nav-toggle
+    >
+      <span class="sr-only">Open menu</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+    </button>
+  </div>
+
+  <nav id="mobile-nav" aria-label="Mobile" class="hidden border-t border-border md:hidden" data-nav-panel>
+    <div class="container-page flex flex-col gap-1 py-4">
+      {nav.map((item) => (
+        <a
+          href={url(item.href)}
+          aria-current={isCurrent(item.href) ? 'page' : undefined}
+          class="rounded-md px-2 py-2.5 text-base font-medium text-fg-muted hover:text-fg aria-[current=page]:text-fg"
+        >{item.label}</a>
+      ))}
+      <a href={url('/waitlist/')} class="btn btn-primary mt-2">Join the barber waitlist</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-nav-panel]');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    toggle.querySelector('.sr-only')!.textContent = open ? 'Open menu' : 'Close menu';
+    panel?.classList.toggle('hidden', open);
+  });
+</script>

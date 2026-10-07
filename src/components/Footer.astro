@@ -1,0 +1,37 @@
+---
+import Logo from './Logo.astro';
+import { url, SITE } from '../lib/site';
+const year = new Date().getFullYear();
+---
+<footer class="mt-24 border-t border-border">
+  <div class="container-page grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
+    <div class="max-w-sm">
+      <Logo />
+      <p class="mt-4 text-sm leading-relaxed text-fg-muted">
+        Booking and payments for independent barbers. Launching first in {SITE.city}.
+      </p>
+    </div>
+    <nav aria-label="Product">
+      <h2 class="text-sm font-semibold text-fg">Product</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        <li><a class="text-fg-muted hover:text-fg" href={url('/')}>For barbers</a></li>
+        <li><a class="text-fg-muted hover:text-fg" href={url('/clients/')}>For clients</a></li>
+        <li><a class="text-fg-muted hover:text-fg" href={url('/pricing/')}>Pricing</a></li>
+        <li><a class="text-fg-muted hover:text-fg" href={url('/waitlist/')}>Barber waitlist</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Legal">
+      <h2 class="text-sm font-semibold text-fg">Legal</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        <li><a class="text-fg-muted hover:text-fg" href={url('/privacy/')}>Privacy policy <span class="text-fg-subtle">(draft)</span></a></li>
+        <li><a class="text-fg-muted hover:text-fg" href={url('/terms/')}>Terms of service <span class="text-fg-subtle">(draft)</span></a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="border-t border-border">
+    <div class="container-page flex flex-col gap-2 py-6 text-xs text-fg-subtle sm:flex-row sm:items-center sm:justify-between">
+      <p>&copy; {year} Fade. All rights reserved.</p>
+      <p>Payments powered by Stripe Connect.</p>
+    </div>
+  </div>
+</footer>

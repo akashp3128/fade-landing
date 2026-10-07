@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DraftBanner from '../components/DraftBanner.astro';
+import { SITE } from '../lib/site';
+const L = SITE.legalName;
+const C = SITE.contactEmail;
+---
+<BaseLayout title="Terms of service (draft)" description="Draft terms of service for Fade, pending legal review." noindex>
+  <article class="container-page max-w-3xl pb-10 pt-14 md:pt-20">
+    <p class="eyebrow">Legal</p>
+    <h1 class="mt-4 font-display text-4xl font-semibold tracking-tight">Terms of service</h1>
+    <p class="mt-3 text-sm text-fg-subtle">Last updated: [date] · Version: DRAFT</p>
+    <div class="mt-8">
+      <DraftBanner label="DRAFT — pending legal review">
+        This is a working outline for review by counsel. It is not yet in effect, is not a binding agreement, and
+        will change before launch. Bracketed items are placeholders.
+      </DraftBanner>
+    </div>
+
+    <div class="prose-legal mt-6">
+      <p>These terms govern your use of the Fade website and app provided by {L} ("Fade", "we", "us"). By using Fade you agree to these terms.</p>
+
+      <h2>1. The service</h2>
+      <p>Fade provides software that lets barbers publish a profile, services, prices and availability, accept bookings, and receive payments, and lets clients find and book barbers. Fade is a technology platform; barbers are independent and are not employees or agents of Fade. [Confirm characterization with counsel.]</p>
+
+      <h2>2. Accounts</h2>
+      <p>You must provide accurate information and keep your login secure. You are responsible for activity under your account. [Eligibility and age requirements to be confirmed.]</p>
+
+      <h2>3. Barbers</h2>
+      <ul>
+        <li>You are responsible for your services, prices, availability, licensing and compliance with applicable laws, including any Illinois barber licensing requirements.</li>
+        <li>Payouts require a Stripe account and acceptance of the <a href="https://stripe.com/connect-account/legal" rel="noopener">Stripe Connected Account Agreement</a>.</li>
+        <li>[Fees, cancellation and no-show policies to be defined.]</li>
+      </ul>
+
+      <h2>4. Clients</h2>
+      <ul>
+        <li>Bookings are agreements between you and the barber.</li>
+        <li>[Payment timing, cancellations, refunds and no-show rules to be defined.]</li>
+      </ul>
+
+      <h2>5. Payments</h2>
+      <p>Payments are processed by Stripe. [Describe platform fees, if any, and how processing fees are handled once pricing is final.]</p>
+
+      <h2>6. Acceptable use</h2>
+      <p>Do not misuse Fade, including by posting false information, harassing others, attempting to access accounts or data that are not yours, or interfering with the service.</p>
+
+      <h2>7. Content</h2>
+      <p>You keep ownership of content you upload (such as photos and descriptions) and grant Fade a license to host and display it to operate the service. [Scope to be confirmed.]</p>
+
+      <h2>8. Disclaimers and limitation of liability</h2>
+      <p>[To be drafted by counsel.]</p>
+
+      <h2>9. Termination</h2>
+      <p>[To be drafted by counsel.]</p>
+
+      <h2>10. Governing law</h2>
+      <p>[Jurisdiction and dispute resolution to be determined by counsel.]</p>
+
+      <h2>11. Contact</h2>
+      <p>{L} · [mailing address] · {C}</p>
+    </div>
+  </article>
+</BaseLayout>

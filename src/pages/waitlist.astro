@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WaitlistForm from '../components/WaitlistForm.astro';
+import { SITE } from '../lib/site';
+
+const next = [
+  { title: 'We review your sign-up', body: `We are onboarding ${SITE.city} barbers first, in small groups.` },
+  { title: 'We reach out by email', body: 'When early access opens for you, we will email you with next steps.' },
+  { title: 'Set up and share your link', body: 'Add your services and hours, connect Stripe, and start taking bookings.' },
+];
+---
+<BaseLayout
+  title="Join the barber waitlist"
+  description="Join the Fade barber waitlist. We are onboarding independent barbers in Chicago first for early access to booking and Stripe payouts."
+>
+  <section class="container-page grid gap-12 pb-10 pt-14 md:pt-20 lg:grid-cols-[1fr_1.25fr]">
+    <div>
+      <p class="eyebrow">Barber waitlist</p>
+      <h1 class="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">Get early access to Fade</h1>
+      <p class="mt-5 text-lg leading-relaxed text-fg-muted">
+        Tell us a little about you and your chair. We will reach out when early access opens for barbers in your city.
+      </p>
+      <h2 class="mt-10 text-sm font-semibold uppercase tracking-wider text-fg-subtle">What happens next</h2>
+      <ol class="mt-4 space-y-5">
+        {next.map((s, i) => (
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border-strong text-sm font-semibold text-accent">{i + 1}</span>
+            <div>
+              <p class="font-semibold text-fg">{s.title}</p>
+              <p class="mt-1 text-sm text-fg-muted">{s.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <div>
+      <WaitlistForm />
+    </div>
+  </section>
+</BaseLayout>

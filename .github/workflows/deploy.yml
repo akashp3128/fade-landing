@@ -1,0 +1,63 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # All optional. Set as repository *Variables* (not secrets); they are public by design.
+      PUBLIC_WAITLIST_MODE: ${{ vars.PUBLIC_WAITLIST_MODE || 'none' }}
+      PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
+      PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PUBLIC_SUPABASE_ANON_KEY }}
+      PUBLIC_SUPABASE_WAITLIST_TABLE: ${{ vars.PUBLIC_SUPABASE_WAITLIST_TABLE || 'barber_waitlist' }}
+      PUBLIC_WAITLIST_ENDPOINT: ${{ vars.PUBLIC_WAITLIST_ENDPOINT }}
+      PUBLIC_WAITLIST_FALLBACK_EMAIL: ${{ vars.PUBLIC_WAITLIST_FALLBACK_EMAIL }}
+      PUBLIC_ANALYTICS_PROVIDER: ${{ vars.PUBLIC_ANALYTICS_PROVIDER || 'none' }}
+      PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.PUBLIC_PLAUSIBLE_DOMAIN }}
+      PUBLIC_PLAUSIBLE_SRC: ${{ vars.PUBLIC_PLAUSIBLE_SRC }}
+      PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.PUBLIC_UMAMI_WEBSITE_ID }}
+      PUBLIC_UMAMI_SRC: ${{ vars.PUBLIC_UMAMI_SRC }}
+      SITE_URL: ${{ vars.SITE_URL || 'https://akashp3128.github.io' }}
+      BASE_PATH: ${{ vars.BASE_PATH || '/fade-landing' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run check:links
+      - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: dist
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

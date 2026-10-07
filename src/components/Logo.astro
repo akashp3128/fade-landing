@@ -1,0 +1,11 @@
+---
+interface Props { class?: string }
+const { class: className = '' } = Astro.props;
+---
+<span class:list={['inline-flex items-center gap-2', className]}>
+  <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true" class="shrink-0">
+    <rect width="32" height="32" rx="8" fill="var(--color-accent)" />
+    <path d="M10 8h12.5v3.6H14v3.3h7.4v3.5H14V24h-4z" fill="var(--color-accent-fg)" />
+  </svg>
+  <span class="font-display text-xl font-semibold tracking-tight text-fg">Fade</span>
+</span>
