@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DraftBanner from '../components/DraftBanner.astro';
+import { SITE } from '../lib/site';
+const L = SITE.legalName;
+const C = SITE.contactEmail;
+---
+<BaseLayout title="Privacy policy (draft)" description="Draft privacy policy for Fade, pending legal review." noindex>
+  <article class="container-page max-w-3xl pb-10 pt-14 md:pt-20">
+    <p class="eyebrow">Legal</p>
+    <h1 class="mt-4 font-display text-4xl font-semibold tracking-tight">Privacy policy</h1>
+    <p class="mt-3 text-sm text-fg-subtle">Last updated: [date] · Version: DRAFT</p>
+    <div class="mt-8">
+      <DraftBanner label="DRAFT — pending legal review">
+        This is a working draft for review by counsel. It is not yet in effect and may change substantially.
+        Bracketed items such as {L} and {C} are placeholders that must be filled in before publishing.
+      </DraftBanner>
+    </div>
+
+    <div class="prose-legal mt-6">
+      <p>This policy explains how {L} ("Fade", "we", "us") collects, uses and shares information when you visit this website, join our waitlist, or use the Fade app.</p>
+
+      <h2>Information we collect</h2>
+      <h3>Waitlist sign-ups</h3>
+      <ul>
+        <li>Name, email address and city</li>
+        <li>Optional: shop name and Instagram handle</li>
+        <li>Whether you are a barber or shop owner, and your consent to be contacted</li>
+      </ul>
+      <h3>Website usage</h3>
+      <p>If analytics are enabled, we use a privacy-focused analytics service [provider name, if any] to understand aggregate page views. [Describe whether cookies or personal identifiers are used.]</p>
+      <h3>The Fade app (when available)</h3>
+      <p>[To be completed: account details, barber profile information, services and hours, booking history, approximate or precise location if permitted, photos you upload, and device information.]</p>
+      <h3>Payments</h3>
+      <p>Payments and barber payouts are processed by Stripe. Card numbers and bank account details are collected and stored by Stripe, not by Fade. Stripe's use of your information is governed by the <a href="https://stripe.com/privacy" rel="noopener">Stripe Privacy Policy</a>.</p>
+
+      <h2>How we use information</h2>
+      <ul>
+        <li>To contact waitlist members about early access and launch updates</li>
+        <li>To provide, maintain and improve the Fade website and app</li>
+        <li>To process bookings and payments (via Stripe)</li>
+        <li>To prevent fraud, spam and abuse</li>
+        <li>[Other purposes to be confirmed by counsel]</li>
+      </ul>
+      <p>We do not sell your personal information.</p>
+
+      <h2>Service providers</h2>
+      <p>We share information with vendors that help us run Fade, such as [hosting / database provider], [form or email provider], Stripe (payments) and [analytics provider, if any]. [Final list to be confirmed.]</p>
+
+      <h2>Retention</h2>
+      <p>[To be completed: how long waitlist and account data is kept, and how it is deleted.]</p>
+
+      <h2>Your choices and rights</h2>
+      <p>You can unsubscribe from emails at any time using the link in the email or by contacting us. You may request access to, correction of, or deletion of your information by emailing {C}. [State-specific rights, including Illinois and other applicable laws, to be reviewed by counsel.]</p>
+
+      <h2>Children</h2>
+      <p>Fade is not directed to children under 13 [age threshold to be confirmed], and we do not knowingly collect their information.</p>
+
+      <h2>Changes</h2>
+      <p>We may update this policy. If we make material changes, we will update the date above and, where appropriate, notify you.</p>
+
+      <h2>Contact</h2>
+      <p>{L} · [mailing address] · {C}</p>
+    </div>
+  </article>
+</BaseLayout>

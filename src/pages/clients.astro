@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/site';
+
+const items = [
+  { icon: 'search', title: 'Find barbers near you', body: 'Browse Chicago barbers by neighborhood and see who has open time.' },
+  { icon: 'scissors', title: 'Real services and prices', body: 'Every barber lists their own services, how long they take and what they cost, before you book.' },
+  { icon: 'calendar', title: 'Book an open slot', body: 'Pick a time that is actually available. No texting back and forth to find one.' },
+  { icon: 'card', title: 'Pay in the app', body: 'Pay securely when you book. Payments are processed by Stripe.' },
+] as const;
+---
+<BaseLayout
+  title="For clients"
+  description="Fade is starting with barbers. Client discovery comes next: find Chicago barbers, see real services and prices, and book and pay in one flow."
+>
+  <section class="relative overflow-hidden">
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(50%_60%_at_30%_0%,var(--color-accent-soft),transparent)]" aria-hidden="true"></div>
+    <div class="container-page pb-16 pt-14 md:pt-20">
+      <p class="eyebrow">For clients</p>
+      <h1 class="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+        A better way to book your barber is coming to Chicago
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-fg-muted">
+        We are building Fade for barbers first, so that by the time you open the app, the barbers on it have real
+        services, real hours and real availability. Client discovery opens after that, starting in Chicago.
+      </p>
+      <div class="mt-8 inline-flex items-center gap-3 rounded-card border border-border bg-surface px-4 py-3 text-sm">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent-soft text-accent"><Icon name="pin" class="h-4 w-4" /></span>
+        <span><span class="font-semibold text-fg">Status:</span> <span class="text-fg-muted">client discovery not yet open · launching in Chicago</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-16" aria-labelledby="what-title">
+    <div class="container-page">
+      <h2 id="what-title" class="font-display text-3xl font-semibold tracking-tight">What you will be able to do</h2>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+        {items.map((it) => (
+          <li class="card flex gap-4 p-6">
+            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-control bg-accent-soft text-accent"><Icon name={it.icon} /></span>
+            <div>
+              <h3 class="font-semibold text-fg">{it.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-fg-muted">{it.body}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="refer-title">
+    <div class="container-page">
+      <div class="grid gap-8 rounded-panel border border-border bg-surface p-8 md:grid-cols-[2fr_1fr] md:items-center md:p-12">
+        <div>
+          <h2 id="refer-title" class="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Have a barber you love?</h2>
+          <p class="mt-3 text-fg-muted">
+            Send them our way. When your barber is on Fade, you can book them through their link before client discovery even opens.
+          </p>
+        </div>
+        <div class="flex md:justify-end">
+          <a href={url('/waitlist/')} class="btn btn-primary">Barber waitlist</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

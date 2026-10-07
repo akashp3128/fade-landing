@@ -1,0 +1,175 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingPreview from '../components/BookingPreview.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/site';
+
+const features = [
+  { icon: 'user', title: 'Your barber profile', body: 'Your name, photo, shop and location in one clean page that clients can trust.' },
+  { icon: 'scissors', title: 'Services and prices', body: 'List each cut with its length and price. Change them anytime; your link updates instantly.' },
+  { icon: 'clock', title: 'Hours you control', body: 'Set your weekly hours and block off time. Clients only see the slots you actually have.' },
+  { icon: 'calendar', title: 'Bookings in one place', body: 'See upcoming appointments, who is coming and what they booked, without DMs or texts back and forth.' },
+  { icon: 'card', title: 'Payouts with Stripe Connect', body: 'Clients pay in the app. Money goes to your own Stripe account and pays out to your bank.' },
+  { icon: 'link', title: 'One shareable booking link', body: 'Put it in your Instagram bio, your texts or a QR code at your chair. Clients book in a few taps.' },
+] as const;
+
+const steps = [
+  { title: 'Set up your chair', body: 'Create your profile, add your services and prices, and set the hours you want to work.' },
+  { title: 'Connect payouts', body: 'Link a Stripe account during onboarding so you can get paid. Stripe handles identity and bank details.' },
+  { title: 'Share your link', body: 'Clients pick a service and an open time, then book and pay. You see it in your schedule right away.' },
+];
+
+const faqs = [
+  { q: 'Who is Fade for right now?', a: 'Independent barbers and booth renters, starting in Chicago. We are building the barber tools first and opening client discovery after.' },
+  { q: 'When does it launch?', a: 'We do not have a public launch date yet. Barbers on the waitlist will hear first when early access opens.' },
+  { q: 'How do payments work?', a: 'Payments are processed by Stripe through Stripe Connect. You onboard with Stripe directly, and payouts go to the bank account you add there. Fade does not store your bank details.' },
+  { q: 'What does it cost?', a: 'Pricing is not final. The pricing page shows placeholder tiers so you can see the direction; we will confirm real prices before anyone is charged.' },
+  { q: 'Which phones does it run on?', a: 'Fade is being built for iOS and Android. It is not in the App Store or Google Play yet.' },
+];
+---
+<BaseLayout
+  title="Fade"
+  description="Fade is a booking and payments app for independent barbers: profile, services, hours, bookings, Stripe payouts and one shareable booking link. Launching first in Chicago."
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(60%_60%_at_70%_0%,var(--color-accent-soft),transparent)]" aria-hidden="true"></div>
+    <div class="container-page grid items-center gap-14 pb-20 pt-14 md:pt-20 lg:grid-cols-[1.1fr_1fr] lg:pb-28">
+      <div>
+        <p class="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-fg-muted">
+          <span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+          For barbers · Launching first in Chicago
+        </p>
+        <h1 class="mt-6 font-display text-4xl font-semibold leading-[1.08] tracking-tight text-fg sm:text-5xl lg:text-6xl">
+          <span class="block">Your chair.</span>
+          <span class="block">Your bookings.</span>
+          <span class="block text-accent">Your payouts.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-fg-muted">
+          Fade is a booking and payments app built for independent barbers. Set your services and hours,
+          share one link, and let clients book and pay without the back-and-forth.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href={url('/waitlist/')} class="btn btn-primary px-6 py-3.5 text-base">Join the barber waitlist</a>
+          <a href="#how-it-works" class="btn btn-secondary px-6 py-3.5 text-base">See how it works</a>
+        </div>
+        <p class="mt-4 text-sm text-fg-subtle">Free to join the waitlist. No card needed.</p>
+      </div>
+      <BookingPreview />
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="border-t border-border bg-surface/40 py-20 lg:py-24" aria-labelledby="features-title">
+    <div class="container-page">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Built for the chair</p>
+        <h2 id="features-title" class="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">Everything you need to take bookings and get paid</h2>
+        <p class="mt-4 text-fg-muted">No spreadsheet of appointments, no sorting through DMs. Just the tools a working barber uses every day.</p>
+      </div>
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {features.map((f) => (
+          <li class="card p-6">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-control bg-accent-soft text-accent">
+              <Icon name={f.icon} />
+            </span>
+            <h3 class="mt-4 text-base font-semibold text-fg">{f.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-fg-muted">{f.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works" class="scroll-mt-20 py-20 lg:py-24" aria-labelledby="how-title">
+    <div class="container-page">
+      <div class="max-w-2xl">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how-title" class="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">From sign-up to first booking in three steps</h2>
+      </div>
+      <ol class="mt-12 grid gap-6 md:grid-cols-3">
+        {steps.map((s, i) => (
+          <li class="relative rounded-card border border-border p-6">
+            <span class="font-display text-3xl font-semibold text-accent">0{i + 1}</span>
+            <h3 class="mt-3 text-lg font-semibold text-fg">{s.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-fg-muted">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Payments -->
+  <section class="py-4" aria-labelledby="payments-title">
+    <div class="container-page">
+      <div class="grid gap-10 rounded-panel border border-border bg-surface p-8 md:p-12 lg:grid-cols-2 lg:items-center">
+        <div>
+          <p class="eyebrow">Payments</p>
+          <h2 id="payments-title" class="mt-3 font-display text-3xl font-semibold tracking-tight">Get paid through Stripe, straight to your bank</h2>
+          <p class="mt-4 text-fg-muted">
+            Fade uses Stripe Connect, so every barber gets their own Stripe account. Clients pay when they book,
+            and Stripe pays out to the bank account you choose.
+          </p>
+        </div>
+        <ul class="space-y-4 text-sm">
+          <li class="flex gap-3"><Icon name="shield" class="mt-0.5 h-5 w-5 shrink-0 text-accent" /><span class="text-fg-muted"><strong class="font-semibold text-fg">Your bank details stay with Stripe.</strong> Identity checks and bank info are handled in Stripe's onboarding, not stored by Fade.</span></li>
+          <li class="flex gap-3"><Icon name="card" class="mt-0.5 h-5 w-5 shrink-0 text-accent" /><span class="text-fg-muted"><strong class="font-semibold text-fg">Clients pay in the app.</strong> No cash-app screenshots or chasing payments after the cut.</span></li>
+          <li class="flex gap-3"><Icon name="calendar" class="mt-0.5 h-5 w-5 shrink-0 text-accent" /><span class="text-fg-muted"><strong class="font-semibold text-fg">Payouts on Stripe's schedule.</strong> Timing follows Stripe's standard payout terms for your account.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- For clients teaser -->
+  <section class="py-20 lg:py-24" aria-labelledby="clients-title">
+    <div class="container-page grid gap-10 lg:grid-cols-2 lg:items-center">
+      <div>
+        <p class="eyebrow">For clients</p>
+        <h2 id="clients-title" class="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">Finding a great barber in Chicago comes next</h2>
+        <p class="mt-4 text-fg-muted">
+          Once barbers are set up, we will open Fade to clients: browse barbers near you, see real services and prices,
+          and book and pay in a few taps. Before that, clients will be able to book a Fade barber directly through that barber's link.
+        </p>
+        <a href={url('/clients/')} class="btn btn-secondary mt-6">What's coming for clients</a>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+        <li class="card p-5"><Icon name="search" class="h-5 w-5 text-accent" /><p class="mt-3 text-sm font-semibold text-fg">Discover</p><p class="mt-1 text-sm text-fg-muted">Barbers near you</p></li>
+        <li class="card p-5"><Icon name="pin" class="h-5 w-5 text-accent" /><p class="mt-3 text-sm font-semibold text-fg">Chicago first</p><p class="mt-1 text-sm text-fg-muted">Other cities later</p></li>
+        <li class="card p-5"><Icon name="calendar" class="h-5 w-5 text-accent" /><p class="mt-3 text-sm font-semibold text-fg">Book &amp; pay</p><p class="mt-1 text-sm text-fg-muted">In one flow</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="border-t border-border py-20 lg:py-24" aria-labelledby="faq-title">
+    <div class="container-page grid gap-10 lg:grid-cols-[1fr_2fr]">
+      <div>
+        <p class="eyebrow">FAQ</p>
+        <h2 id="faq-title" class="mt-3 font-display text-3xl font-semibold tracking-tight">Questions barbers ask</h2>
+      </div>
+      <div class="divide-y divide-border border-y border-border">
+        {faqs.map((f) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md text-base font-medium text-fg [&::-webkit-details-marker]:hidden">
+              {f.q}
+              <span class="text-xl leading-none text-fg-subtle transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="pt-4" aria-labelledby="cta-title">
+    <div class="container-page">
+      <div class="rounded-panel border border-accent/30 bg-[linear-gradient(135deg,var(--color-accent-soft),transparent_60%)] p-8 text-center md:p-14">
+        <h2 id="cta-title" class="font-display text-3xl font-semibold tracking-tight sm:text-4xl">Be one of the first barbers on Fade</h2>
+        <p class="mx-auto mt-4 max-w-xl text-fg-muted">Join the waitlist and we will reach out when early access opens for Chicago barbers.</p>
+        <a href={url('/waitlist/')} class="btn btn-primary mt-8 px-6 py-3.5 text-base">Join the barber waitlist</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

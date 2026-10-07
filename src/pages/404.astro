@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/site';
+---
+<BaseLayout title="Page not found" description="The page you were looking for could not be found." path="/404" noindex>
+  <section class="container-page flex flex-col items-center py-24 text-center md:py-32">
+    <p class="font-display text-7xl font-semibold text-accent md:text-8xl">404</p>
+    <h1 class="mt-6 font-display text-3xl font-semibold tracking-tight sm:text-4xl">This page took a little off the top</h1>
+    <p class="mt-4 max-w-md text-fg-muted">We couldn't find the page you were looking for. It may have moved, or the link might be wrong.</p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a href={url('/')} class="btn btn-primary">Go to home</a>
+      <a href={url('/waitlist/')} class="btn btn-secondary">Join the barber waitlist</a>
+    </div>
+  </section>
+</BaseLayout>

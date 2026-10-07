@@ -1,0 +1,31 @@
+---
+/**
+ * Analytics hook. Renders NOTHING unless PUBLIC_ANALYTICS_PROVIDER is set at build time.
+ *   plausible → needs PUBLIC_PLAUSIBLE_DOMAIN (optional PUBLIC_PLAUSIBLE_SRC for self-hosted/proxied)
+ *   umami     → needs PUBLIC_UMAMI_WEBSITE_ID and PUBLIC_UMAMI_SRC
+ * Always defines window.fadeTrack(event, props) so components can emit events safely;
+ * it is a no-op when no provider is configured.
+ */
+const provider = (import.meta.env.PUBLIC_ANALYTICS_PROVIDER || 'none').toLowerCase().trim();
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN?.trim();
+const plausibleSrc = import.meta.env.PUBLIC_PLAUSIBLE_SRC?.trim() || 'https://plausible.io/js/script.js';
+const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID?.trim();
+const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC?.trim();
+
+const usePlausible = provider === 'plausible' && !!plausibleDomain;
+const useUmami = provider === 'umami' && !!umamiId && !!umamiSrc;
+const active = usePlausible ? 'plausible' : useUmami ? 'umami' : 'none';
+---
+{usePlausible && <script is:inline defer data-domain={plausibleDomain} src={plausibleSrc}></script>}
+{useUmami && <script is:inline defer data-website-id={umamiId} src={umamiSrc}></script>}
+<script is:inline define:vars={{ active }}>
+  window.fadeTrack = function (event, props) {
+    try {
+      if (active === 'plausible' && typeof window.plausible === 'function') {
+        window.plausible(event, props ? { props } : undefined);
+      } else if (active === 'umami' && window.umami && typeof window.umami.track === 'function') {
+        window.umami.track(event, props);
+      }
+    } catch (_) { /* analytics must never break the page */ }
+  };
+</script>
